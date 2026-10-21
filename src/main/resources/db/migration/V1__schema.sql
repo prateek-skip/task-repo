@@ -7,7 +7,7 @@ CREATE TABLE categories (
 
 CREATE TABLE products (
     id           uuid          PRIMARY KEY,
-    sku          varchar(64)   NOT NULL UNIQUE,
+    sku          varchar(64)   NOT NULL,
     name         varchar(255)  NOT NULL,
     description  text,
     category_id  uuid          NOT NULL REFERENCES categories (id),
@@ -23,5 +23,7 @@ CREATE TABLE products (
     -- Optimistic locking; also doubles as the HTTP ETag.
     version      bigint        NOT NULL DEFAULT 0,
     created_at   timestamptz   NOT NULL DEFAULT now(),
-    updated_at   timestamptz   NOT NULL DEFAULT now()
+    updated_at   timestamptz   NOT NULL DEFAULT now(),
+    -- Named so the application can recognise a duplicate SKU without parsing driver messages.
+    CONSTRAINT uq_products_sku UNIQUE (sku)
 );
