@@ -1,0 +1,31 @@
+# Build
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+.sts4-cache/
+/nbproject/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+build/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Local working notes
+PLAN.md
