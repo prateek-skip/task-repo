@@ -48,6 +48,11 @@ management:
     health:
       probes:
         enabled: true
+      group:
+        readiness:
+          # PostgreSQL only. The service keeps serving from the database when Redis is down, so a
+          # Redis outage must not take every instance out of the load balancer at once.
+          include: readinessState,db
 
 springdoc:
   api-docs:
@@ -56,6 +61,9 @@ springdoc:
     path: /swagger-ui.html
 
 catalog:
+  http:
+    # Cache-Control max-age on product and listing responses.
+    max-age: 30s
   cache:
     # Single products are evicted on write, so a long TTL is safe.
     product-ttl: 10m
@@ -64,3 +72,15 @@ catalog:
     search-ttl: 60s
     # Categories are seeded reference data.
     category-ttl: 1h
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+# One JSON object per log line, so the log pipeline can index fields without parsing text.
+logging:
+  structured:
+    format:
+      console: ecs
